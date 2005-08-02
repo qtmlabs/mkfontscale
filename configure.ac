@@ -63,7 +63,7 @@ XORG_WITH_LINT
 
 dnl From mkfontdir/configure.ac
 AC_PATH_PROG(SED, sed)
-AC_PATH_PROG(MKFONTSCALE, mkfontscale)
+AC_SUBST([bindir])
 
 AC_CONFIG_FILES([
 	Makefile
