@@ -25,8 +25,10 @@ bin_SCRIPTS = mkfontdir
 
 dist_man1_MANS = mkfontdir.man
 
-mkfontdir: mkfontdir.cpp
-	$(SED) s,BINDIR,`echo @bindir@/mkfontscale | $(SED) s,/[^/]*$$,,`, < mkfontdir.cpp | $(SED) s/XCOMM/\#/ > $@
+.cpp:
+	$(SED) s,BINDIR,`echo @bindir@/mkfontscale | $(SED) s,/[^/]*$$,,`, < $< | $(SED) s/XCOMM/\#/ > $@
+
+SUFFIXES = .cpp
 
 EXTRA_DIST = mkfontdir.cpp
 CLEANFILES = $(bin_SCRIPTS)
