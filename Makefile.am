@@ -26,7 +26,7 @@ bin_SCRIPTS = mkfontdir
 dist_man1_MANS = mkfontdir.man
 
 .cpp:
-	$(SED) s,BINDIR,`echo @bindir@/mkfontscale | $(SED) s,/[^/]*$$,,`, < $< | $(SED) s/XCOMM/\#/ > $@
+	$(AM_V_GEN)$(SED) s,BINDIR,`echo @bindir@/mkfontscale | $(SED) s,/[^/]*$$,,`, < $< | $(SED) s/XCOMM/\#/ > $@
 
 SUFFIXES = .cpp
 
