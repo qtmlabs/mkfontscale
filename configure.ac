@@ -62,7 +62,6 @@ dnl Allow checking code with lint, sparse, etc.
 XORG_WITH_LINT
 
 dnl From mkfontdir/configure.ac
-AC_PATH_PROG(SED, sed)
 AC_SUBST([bindir])
 
 AC_CONFIG_FILES([
