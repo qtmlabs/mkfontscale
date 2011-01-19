@@ -23,8 +23,6 @@ SUBDIRS = man
 bin_PROGRAMS = mkfontscale
 bin_SCRIPTS = mkfontdir
 
-dist_man1_MANS = mkfontdir.man
-
 .cpp:
 	$(AM_V_GEN)$(SED) s,BINDIR,`echo @bindir@/mkfontscale | $(SED) s,/[^/]*$$,,`, < $< | $(SED) s/XCOMM/\#/ > $@
 
