@@ -61,9 +61,6 @@ PKG_CHECK_MODULES(X11, [xproto >= 7.0.25])
 dnl Allow checking code with lint, sparse, etc.
 XORG_WITH_LINT
 
-dnl From mkfontdir/configure.ac
-AC_SUBST([bindir])
-
 AC_CONFIG_FILES([
 	Makefile
 	man/Makefile])

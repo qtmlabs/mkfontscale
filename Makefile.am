@@ -23,13 +23,12 @@ SUBDIRS = man
 bin_PROGRAMS = mkfontscale
 bin_SCRIPTS = mkfontdir
 
-.cpp:
-	$(AM_V_GEN)$(SED) s,BINDIR,`echo @bindir@/mkfontscale | $(SED) s,/[^/]*$$,,`, < $< | $(SED) s/XCOMM/\#/ > $@
-
-SUFFIXES = .cpp
-
-EXTRA_DIST = mkfontdir.cpp
 CLEANFILES = $(bin_SCRIPTS)
+EXTRA_DIST = $(bin_SCRIPTS:=.in)
+DIR_SUBSTS = -e 's|@bindir[@]|$(bindir)|g'
+
+mkfontdir: mkfontdir.in
+	$(AM_V_GEN)$(SED) $(DIR_SUBSTS) < $< > $@
 
 AM_CPPFLAGS = @MKFONTSCALE_CFLAGS@ @X11_CFLAGS@ -D_BSD_SOURCE
 AM_CFLAGS = $(CWARNFLAGS)
