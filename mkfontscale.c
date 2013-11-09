@@ -120,7 +120,7 @@ usage(void)
             "mkfontscale [ -b ] [ -s ] [ -o filename ] [-x suffix ]\n"
             "            [ -a encoding ] [ -f fuzz ] [ -l ]\n"
             "            [ -e directory ] [ -p prefix ] [ -n ] [ -r ] \n"
-            "            [-u] [-U] [ directory ]...\n");
+            "            [-u] [-U] [-v] [ directory ]...\n");
 }
 
 int
@@ -238,6 +238,9 @@ main(int argc, char **argv)
 	    argn++;
 	} else if (strcmp(argv[argn], "-n") == 0) {
 	    argn++;
+	} else if (strcmp(argv[argn], "-v") == 0) {
+	    printf("%s\n", PACKAGE_STRING);
+	    exit(0);
 	} else {
             usage();
             exit(1);
