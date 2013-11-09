@@ -113,16 +113,24 @@ static ListPtr encodingsToDo;
 static int reencodeLegacy;
 static char *encodingPrefix;
 static char *exclusionSuffix;
+static char *ProgramName;
 
 static void _X_NORETURN _X_COLD
 usage(void)
 {
-    fprintf(stderr,
+    fprintf(stderr, "Usage:\n"
             "mkfontscale [ -b ] [ -s ] [ -o filename ] [-x suffix ]\n"
             "            [ -a encoding ] [ -f fuzz ] [ -l ]\n"
             "            [ -e directory ] [ -p prefix ] [ -n ] [ -r ] \n"
             "            [-u] [-U] [-v] [ directory ]...\n");
     exit(1);
+}
+
+static void _X_NORETURN _X_COLD
+missing_arg (const char *option)
+{
+    fprintf(stderr, "%s: %s requires an argument\n", ProgramName, option);
+    usage();
 }
 
 int
@@ -133,6 +141,7 @@ main(int argc, char **argv)
     int rc, ll = 0;
     char prefix[NPREFIX];
 
+    ProgramName = argv[0];
     encodingPrefix = NULL;
     exclusionSuffix = NULL;
 
@@ -168,21 +177,23 @@ main(int argc, char **argv)
             break;
         } else if (strcmp(argv[argn], "-x") == 0) {
             if(argn >= argc - 1) {
-                usage();
+                missing_arg("-x");
             }
             exclusionSuffix = argv[argn + 1];
             argn += 2;
         } else if(strcmp(argv[argn], "-a") == 0) {
             if(argn >= argc - 1) {
-                usage();
+                missing_arg("-a");
             }
             makeList(&argv[argn + 1], 1, encodings, 0);
             argn += 2;
         } else if(strcmp(argv[argn], "-p") == 0) {
             if(argn >= argc - 1) {
-                usage();
+                missing_arg("-p");
             }
             if(strlen(argv[argn + 1]) > NPREFIX - 1) {
+                fprintf(stderr, "%s: argument to -p cannot be longer than "
+                        "%d characters\n", ProgramName, NPREFIX - 1);
                 usage();
             }
             free(encodingPrefix);
@@ -190,7 +201,7 @@ main(int argc, char **argv)
             argn += 2;
         } else if(strcmp(argv[argn], "-e") == 0) {
             if(argn >= argc - 1) {
-                usage();
+                missing_arg("-e");
             }
             rc = readEncodings(encodingsToDo, argv[argn + 1]);
             if(rc < 0)
@@ -219,13 +230,13 @@ main(int argc, char **argv)
             argn++;
         } else if(strcmp(argv[argn], "-o") == 0) {
             if(argn >= argc - 1) {
-                usage();
+                missing_arg("-o");
             }
             outfilename = argv[argn + 1];
             argn += 2;
         } else if(strcmp(argv[argn], "-f") == 0) {
             if(argn >= argc - 1) {
-                usage();
+                missing_arg("-f");
             }
             bigEncodingFuzz = atof(argv[argn + 1]) / 100.0;
             argn += 2;
