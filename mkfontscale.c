@@ -118,7 +118,7 @@ usage(void)
 {
     fprintf(stderr,
             "mkfontscale [ -b ] [ -s ] [ -o filename ] [-x suffix ]\n"
-            "            [ -a encoding ] [ -f fuzz ] [ -l ] "
+            "            [ -a encoding ] [ -f fuzz ] [ -l ]\n"
             "            [ -e directory ] [ -p prefix ] [ -n ] [ -r ] \n"
             "            [-u] [-U] [ directory ]...\n");
 }
