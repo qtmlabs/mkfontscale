@@ -34,6 +34,7 @@
 #include <ctype.h>
 
 #include <X11/Xos.h>
+#include <X11/Xfuncproto.h>
 #include <X11/fonts/fontenc.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -113,7 +114,7 @@ static int reencodeLegacy;
 static char *encodingPrefix;
 static char *exclusionSuffix;
 
-static void
+static void _X_NORETURN _X_COLD
 usage(void)
 {
     fprintf(stderr,
@@ -121,6 +122,7 @@ usage(void)
             "            [ -a encoding ] [ -f fuzz ] [ -l ]\n"
             "            [ -e directory ] [ -p prefix ] [ -n ] [ -r ] \n"
             "            [-u] [-U] [-v] [ directory ]...\n");
+    exit(1);
 }
 
 int
@@ -167,25 +169,21 @@ main(int argc, char **argv)
         } else if (strcmp(argv[argn], "-x") == 0) {
             if(argn >= argc - 1) {
                 usage();
-                exit(1);
             }
             exclusionSuffix = argv[argn + 1];
             argn += 2;
         } else if(strcmp(argv[argn], "-a") == 0) {
             if(argn >= argc - 1) {
                 usage();
-                exit(1);
             }
             makeList(&argv[argn + 1], 1, encodings, 0);
             argn += 2;
         } else if(strcmp(argv[argn], "-p") == 0) {
             if(argn >= argc - 1) {
                 usage();
-                exit(1);
             }
             if(strlen(argv[argn + 1]) > NPREFIX - 1) {
                 usage();
-                exit(1);
             }
             free(encodingPrefix);
             encodingPrefix = dsprintf("%s", argv[argn + 1]);
@@ -193,7 +191,6 @@ main(int argc, char **argv)
         } else if(strcmp(argv[argn], "-e") == 0) {
             if(argn >= argc - 1) {
                 usage();
-                exit(1);
             }
             rc = readEncodings(encodingsToDo, argv[argn + 1]);
             if(rc < 0)
@@ -223,14 +220,12 @@ main(int argc, char **argv)
         } else if(strcmp(argv[argn], "-o") == 0) {
             if(argn >= argc - 1) {
                 usage();
-                exit(1);
             }
             outfilename = argv[argn + 1];
             argn += 2;
         } else if(strcmp(argv[argn], "-f") == 0) {
             if(argn >= argc - 1) {
                 usage();
-                exit(1);
             }
             bigEncodingFuzz = atof(argv[argn + 1]) / 100.0;
             argn += 2;
@@ -243,7 +238,6 @@ main(int argc, char **argv)
 	    exit(0);
 	} else {
             usage();
-            exit(1);
         }
     }
 
