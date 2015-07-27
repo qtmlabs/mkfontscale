@@ -48,6 +48,7 @@
 #include FT_XFREE86_H
 
 #include "list.h"
+#include "constlist.h"
 #include "hash.h"
 #include "data.h"
 #include "ident.h"
@@ -88,14 +89,14 @@ static const char *encodings_array[] =
 static const char *extra_encodings_array[] =
     { "iso10646-1", "adobe-fontspecific", "microsoft-symbol" };
 
-static ListPtr encodings, extra_encodings;
+static ConstListPtr encodings, extra_encodings;
 static const char *outfilename;
 
 #define countof(_a) (sizeof(_a)/sizeof((_a)[0]))
 
 static int doDirectory(const char*, int, ListPtr);
-static int checkEncoding(FT_Face face, char *encoding_name);
-static int checkExtraEncoding(FT_Face face, char *encoding_name, int found);
+static int checkEncoding(FT_Face face, const char *encoding_name);
+static int checkExtraEncoding(FT_Face face, const char *encoding_name, int found);
 static int find_cmap(int type, int pid, int eid, FT_Face face);
 static const char* notice_foundry(const char *notice);
 static const char* vendor_foundry(const signed char *vendor);
@@ -158,11 +159,11 @@ main(int argc, char **argv)
 
     outfilename = NULL;
 
-    encodings = makeList(encodings_array, countof(encodings_array), NULL, 0);
+    encodings = makeConstList(encodings_array, countof(encodings_array), NULL, 0);
 
-    extra_encodings = makeList(extra_encodings_array,
-                               countof(extra_encodings_array),
-                               NULL, 0);
+    extra_encodings = makeConstList(extra_encodings_array,
+				    countof(extra_encodings_array),
+				    NULL, 0);
     doBitmaps = 0;
     doISO10646_1_encoding = 1;
     doScalable = 1;
@@ -188,7 +189,7 @@ main(int argc, char **argv)
             if(argn >= argc - 1) {
                 missing_arg("-a");
             }
-            makeList(&argv[argn + 1], 1, encodings, 0);
+            makeConstList((const char **)&argv[argn + 1], 1, encodings, 0);
             argn += 2;
         } else if(strcmp(argv[argn], "-p") == 0) {
             if(argn >= argc - 1) {
@@ -782,7 +783,8 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
     struct dirent** namelist;
     FT_Error ftrc;
     FT_Face face;
-    ListPtr encoding, xlfd, lp;
+    ConstListPtr encoding;
+    ListPtr xlfd, lp;
     HashTablePtr entries;
     HashBucketPtr *array;
     int i, n, dirn, diri, found, rc;
@@ -1039,7 +1041,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
                          (c) == 0xAD || (c) == 0xF71B)
 
 static int
-checkEncoding(FT_Face face, char *encoding_name)
+checkEncoding(FT_Face face, const char *encoding_name)
 {
     FontEncPtr encoding;
     FontMapPtr mapping;
@@ -1211,7 +1213,7 @@ find_cmap(int type, int pid, int eid, FT_Face face)
 }
 
 static int
-checkExtraEncoding(FT_Face face, char *encoding_name, int found)
+checkExtraEncoding(FT_Face face, const char *encoding_name, int found)
 {
     int c;
 
