@@ -154,7 +154,7 @@ main(int argc, char **argv)
     if(prefix[strlen(prefix) - 1] != '/')
         encodingPrefix = dsprintf("%s/", prefix);
     else
-        encodingPrefix = dsprintf("%s", prefix);
+        encodingPrefix = strdup(prefix);
 
     outfilename = NULL;
 
@@ -200,7 +200,7 @@ main(int argc, char **argv)
                 usage();
             }
             free(encodingPrefix);
-            encodingPrefix = dsprintf("%s", argv[argn + 1]);
+            encodingPrefix = strdup(argv[argn + 1]);
             argn += 2;
         } else if(strcmp(argv[argn], "-e") == 0) {
             if(argn >= argc - 1) {
@@ -797,7 +797,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
     else if(dirname_given[i - 1] != '/')
         dirname = dsprintf("%s/", dirname_given);
     else
-        dirname = dsprintf("%s", dirname_given);
+        dirname = strdup(dirname_given);
 
     if(dirname == NULL) {
         perror("dirname");
@@ -816,7 +816,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
         fontscale_name = NULL;
     else {
         if(outfilename[0] == '/')
-            fontscale_name = dsprintf("%s", outfilename);
+            fontscale_name = strdup(outfilename);
         else
             fontscale_name = dsprintf("%s%s", dirname, outfilename);
         if(fontscale_name == NULL) {
