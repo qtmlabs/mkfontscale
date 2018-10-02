@@ -152,8 +152,9 @@ main(int argc, char **argv)
         exit(1);
     }
     if(prefix[strlen(prefix) - 1] != '/')
-        strcat(prefix, "/");
-    encodingPrefix = dsprintf("%s", prefix);
+        encodingPrefix = dsprintf("%s/", prefix);
+    else
+        encodingPrefix = dsprintf("%s", prefix);
 
     outfilename = NULL;
 
