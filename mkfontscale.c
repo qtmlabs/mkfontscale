@@ -1217,15 +1217,15 @@ checkExtraEncoding(FT_Face face, char *encoding_name, int found)
 
     if(strcasecmp(encoding_name, "iso10646-1") == 0) {
         if(doISO10646_1_encoding && find_cmap(FONT_ENCODING_UNICODE, -1, -1, face)) {
-            int found = 0;
+            int cfound = 0;
              /* Export as Unicode if there are at least 15 BMP
                characters that are not a space or ignored. */
             for(c = 0x21; c < 0x10000; c++) {
                 if(CODE_IGNORED(c))
                     continue;
                 if(FT_Get_Char_Index(face, c) > 0)
-                    found++;
-                if(found >= 15)
+                    cfound++;
+                if(cfound >= 15)
                     return 1;
             }
             return 0;
