@@ -925,14 +925,14 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
 
         if(xlfd_name) {
             /* We know it's a bitmap font, and we know its XLFD */
-            int n = strlen(xlfd_name);
+            int l = strlen(xlfd_name);
             if(reencodeLegacy &&
-               n >= 12 && strcasecmp(xlfd_name + n - 11, "-iso10646-1") == 0) {
+               l >= 12 && strcasecmp(xlfd_name + l - 11, "-iso10646-1") == 0) {
                 char *s;
 
-                s = malloc(n - 10);
-                memcpy(s, xlfd_name, n - 11);
-                s[n - 11] = '\0';
+                s = malloc(l - 10);
+                memcpy(s, xlfd_name, l - 11);
+                s[l - 11] = '\0';
                 xlfd = listCons(s, xlfd);
             } else {
                 /* Not a reencodable font -- skip all the rest of the loop body */
