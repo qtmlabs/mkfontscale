@@ -322,7 +322,7 @@ getName(FT_Face face, int nid)
 {
     FT_SfntName name;
     char *string;
-    int i;
+    unsigned int i;
 
     if(getNameHelper(face, nid,
                      TT_PLATFORM_MICROSOFT, TT_MS_ID_UNICODE_CS, &name) ||
@@ -416,8 +416,8 @@ static const char*
 nameWidth(const char *name)
 {
     char buf[500];
-    int i;
-    int n = strlen(name);
+    unsigned int i;
+    size_t n = strlen(name);
 
     if(n >= 499) return NULL;
     for(i = 0; i < n; i++)
@@ -1257,7 +1257,7 @@ checkExtraEncoding(FT_Face face, const char *encoding_name, int found)
 static const char*
 notice_foundry(const char *notice)
 {
-    int i;
+    unsigned int i;
     for(i = 0; i < countof(notice_foundries); i++)
         if(notice && strstr(notice, notice_foundries[i][0]))
             return notice_foundries[i][1];
@@ -1268,7 +1268,7 @@ static int
 vendor_match(const signed char *vendor, const char *vendor_string)
 {
     /* vendor is not necessarily NUL-terminated. */
-    int i, len;
+    size_t i, len;
     len = strlen(vendor_string);
     if(memcmp(vendor, vendor_string, len) != 0)
         return 0;
@@ -1281,7 +1281,7 @@ vendor_match(const signed char *vendor, const char *vendor_string)
 static const char*
 vendor_foundry(const signed char *vendor)
 {
-    int i;
+    unsigned int i;
     for(i = 0; i < countof(vendor_foundries); i++)
         if(vendor_match(vendor, vendor_foundries[i][0]))
             return vendor_foundries[i][1];
