@@ -701,7 +701,7 @@ makeXLFD(char *filename, FT_Face face, int isBitmap)
 static int
 readFontScale(HashTablePtr entries, char *dirname)
 {
-    int n = strlen(dirname);
+    size_t n = strlen(dirname);
     char *filename;
     FILE *in;
     int rc, count, i;
@@ -745,7 +745,7 @@ readFontScale(HashTablePtr entries, char *dirname)
 static int
 filePrio(char *filename)
 {
-    int n = strlen(filename);
+    size_t n = strlen(filename);
     if(n < 4)
         return 0;
     if(strcmp(filename + n - 4, ".otf") == 0)
@@ -788,15 +788,16 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
     HashTablePtr entries;
     HashBucketPtr *array;
     int i, n, dirn, diri, found, rc;
-    int isBitmap=0,xl=0;
+    int isBitmap=0;
+    size_t d, xl=0;
 
     if (exclusionSuffix)
         xl = strlen (exclusionSuffix);
 
-    i = strlen(dirname_given);
-    if(i == 0)
+    d = strlen(dirname_given);
+    if(d == 0)
         dirname = dsprintf("./");
-    else if(dirname_given[i - 1] != '/')
+    else if(dirname_given[d - 1] != '/')
         dirname = dsprintf("%s/", dirname_given);
     else
         dirname = strdup(dirname_given);
@@ -855,7 +856,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
         xlfd = NULL;
 
 	if (xl) {
-	    int dl = strlen (entry->d_name);
+	    size_t dl = strlen (entry->d_name);
 	    if (strcmp (entry->d_name + dl - xl, exclusionSuffix) == 0)
 		continue;
 	}
@@ -927,7 +928,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
 
         if(xlfd_name) {
             /* We know it's a bitmap font, and we know its XLFD */
-            int l = strlen(xlfd_name);
+            size_t l = strlen(xlfd_name);
             if(reencodeLegacy &&
                l >= 12 && strcasecmp(xlfd_name + l - 11, "-iso10646-1") == 0) {
                 char *s;
