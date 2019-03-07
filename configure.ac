@@ -63,6 +63,5 @@ XORG_WITH_LINT
 
 AC_CONFIG_FILES([
 	Makefile
-	mkfontdir
 	man/Makefile])
 AC_OUTPUT
