@@ -446,6 +446,8 @@ t1Weight(const char *weight)
         return "medium";
     if(strcasecmp(weight, "Normal") == 0)
         return "medium";
+    if(strcasecmp(weight, "Plain") == 0)
+        return "medium";
     if(strcasecmp(weight, "Medium") == 0)
         return "medium";
     if(strcasecmp(weight, "Book") == 0)
@@ -460,6 +462,8 @@ t1Weight(const char *weight)
         return "semibold";
     else if(strcasecmp(weight, "Bold") == 0)
         return "bold";
+    else if(strcasecmp(weight, "ExtraBold") == 0) /* freefonts uses this */
+        return "extrabold";
     else if(strcasecmp(weight, "Heavy") == 0) /* FontForge uses this for 800*/
         return "extrabold";
     else if(strcasecmp(weight, "Black") == 0)
