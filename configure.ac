@@ -38,9 +38,6 @@ m4_ifndef([XORG_MACROS_VERSION],
 XORG_MACROS_VERSION(1.8)
 XORG_DEFAULT_OPTIONS
 
-AC_CHECK_LIB(z, gzopen, [],
-	[AC_MSG_ERROR([zlib is required, but was not found.])])
-
 AC_ARG_WITH(bzip2,
 	AS_HELP_STRING([--with-bzip2],
 			[Support bzip2 compressed bitmap fonts]),
@@ -55,7 +52,7 @@ fi
 AC_CHECK_FUNCS([vasprintf])
 
 # Checks for pkg-config packages
-PKG_CHECK_MODULES(MKFONTSCALE, fontenc freetype2)
+PKG_CHECK_MODULES(MKFONTSCALE, fontenc freetype2 zlib)
 PKG_CHECK_MODULES(X11, [xproto >= 7.0.25])
 
 dnl Allow checking code with lint, sparse, etc.
