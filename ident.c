@@ -216,10 +216,12 @@ getInt32(fontFile *f, int format)
     if(rc != 4)
         return -1;
 
+    unsigned int u[4] = {c[0], c[1], c[2], c[3]};
+
     if(format & (1 << 2)) {
-        return (c[0] << 24) | (c[1] << 16) | (c[2] << 8) | (c[3]);
+        return (int)((u[0] << 24) | (u[1] << 16) | (u[2] << 8) | (u[3]));
     } else {
-        return (c[0]) | (c[1] << 8) | (c[2] << 16) | (c[3] << 24);
+        return (int)((u[0]) | (u[1] << 8) | (u[2] << 16) | (u[3] << 24));
     }
 }
 
