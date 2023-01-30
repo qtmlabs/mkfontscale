@@ -44,7 +44,8 @@ static const char *notice_foundries[][2] =
      {"Microsoft", "microsoft"},
      {"Omega", "omega"},
      {"Font21", "hwan"},
-     {"HanYang System", "hanyang"}};
+     {"HanYang System", "hanyang"},
+     {"Google", "google"}};
 
 /* This table is partly taken from ttmkfdir by Joerg Pommnitz. */
 

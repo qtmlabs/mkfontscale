@@ -47,6 +47,7 @@
 #include FT_TYPE1_TABLES_H
 #include FT_BDF_H
 #include FT_XFREE86_H
+#include FT_MULTIPLE_MASTERS_H
 
 #include "list.h"
 #include "constlist.h"
@@ -674,6 +675,32 @@ makeXLFD(char *filename, FT_Face face, int isBitmap)
     tmp = family;
     family = safe(family);
     free((void *)tmp);
+
+    if (FT_HAS_MULTIPLE_MASTERS(face)) {
+        FT_MM_Var *mm;
+
+        FT_Get_MM_Var(face, &mm);
+
+        for (int i = 0; i < mm->num_axis; ++i) {
+            switch (mm->axis[i].tag) {
+                case FT_MAKE_TAG('w', 'g', 'h', 't'):
+                    weight = "0";
+                    break;
+                case FT_MAKE_TAG('w', 'd', 't', 'h'):
+                    sWidth = "0";
+                    break;
+                case FT_MAKE_TAG('i', 't', 'a', 'l'):
+                case FT_MAKE_TAG('s', 'l', 'n', 't'):
+                    slant = "0";
+                    break;
+                default:
+                    adstyle = "[]";
+                    break;
+            }
+        }
+
+        FT_Done_MM_Var(ft_library, mm);
+    }
 
     if(!isBitmap) {
         xlfd = listConsF(xlfd,
