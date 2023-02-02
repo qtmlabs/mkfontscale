@@ -810,7 +810,7 @@ filePrio(char *filename)
 static int
 doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
 {
-    char *dirname, *fontscale_name, *filename, *encdir;
+    char *dirname, *fontscale_name, *filename, *encdir, *idxname;
     FILE *fontscale, *encfile;
     struct dirent** namelist;
     FT_Error ftrc;
@@ -819,7 +819,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
     ListPtr xlfd, lp;
     HashTablePtr entries;
     HashBucketPtr *array;
-    int i, n, dirn, diri, found, rc;
+    int i, n, dirn, diri, found, rc, idx;
     int isBitmap=0;
     size_t d, xl=0;
 
@@ -879,6 +879,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
     }
 
     for(diri = dirn - 1; diri >= 0; diri--) {
+    for(idx = 0; ; idx++) {
         struct dirent *entry = namelist[diri];
         int have_face = 0;
         char *xlfd_name = NULL;
@@ -894,6 +895,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
 	}
 
         filename = dsprintf("%s%s", dirname, entry->d_name);
+        idxname = dsprintf(":%d:%s", idx, entry->d_name);
 
 #define PRIO(x) ((x << 1) + tprio)
 #ifdef DT_LNK
@@ -921,7 +923,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
             goto done;
 
         if(rc == 0) {
-            ftrc = FT_New_Face(ft_library, filename, 0, &face);
+            ftrc = FT_New_Face(ft_library, filename, idx, &face);
             if(ftrc)
                 goto done;
             have_face = 1;
@@ -977,7 +979,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
         }
 
         if(!have_face) {
-            ftrc = FT_New_Face(ft_library, filename, 0, &face);
+            ftrc = FT_New_Face(ft_library, filename, idx, &face);
             if(ftrc)
                 goto done;
             have_face = 1;
@@ -1005,7 +1007,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
                     found = 1;
                     snprintf(buf, MAXFONTNAMELEN, "%s-%s",
                             lp->value, encoding->value);
-                    putHash(entries, buf, entry->d_name, PRIO(filePrio(entry->d_name)));
+                    putHash(entries, buf, idxname, PRIO(filePrio(idxname)));
                 }
             }
             for(encoding = extra_encodings; encoding;
@@ -1014,7 +1016,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
                     /* Do not set found! */
                     snprintf(buf, MAXFONTNAMELEN, "%s-%s",
                             lp->value, encoding->value);
-                    putHash(entries, buf, entry->d_name, PRIO(filePrio(entry->d_name)));
+                    putHash(entries, buf, idxname, PRIO(filePrio(idxname)));
                 }
             }
         }
@@ -1024,7 +1026,11 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
         deepDestroyList(xlfd);
         xlfd = NULL;
         free(filename);
+        free(idxname);
+        if(!have_face)
+            break;
 #undef PRIO
+    }
     }
 
     while(dirn--)
