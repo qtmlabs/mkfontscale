@@ -82,6 +82,7 @@ static const char *vendor_foundries[][2] =
      {"QMSI", "qms"},
      {"RICO", "ricoh"},
      {"URW", "urw"},
-     {"Y&Y", "y&y"}};
+     {"Y&Y", "y&y"},
+     {"GOOG", "google"}};
 
 #endif /* _MKS_DATA_H_ */
