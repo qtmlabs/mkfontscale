@@ -891,7 +891,7 @@ doDirectory(const char *dirname_given, int numEncodings, ListPtr encodingsToDo)
 	if (xl) {
 	    size_t dl = strlen (entry->d_name);
 	    if (strcmp (entry->d_name + dl - xl, exclusionSuffix) == 0)
-		continue;
+		break;
 	}
 
         filename = dsprintf("%s%s", dirname, entry->d_name);
